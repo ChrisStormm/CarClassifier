@@ -7,7 +7,7 @@ import seaborn as sns
 from PIL import Image
 import os
 from keras.preprocessing.image import ImageDataGenerator
-from keras.applications import DenseNet121
+from keras.applications import DenseNet121, DenseNet169
 from keras.models import Sequential
 from keras.layers import Flatten, Dense
 from keras.callbacks import ModelCheckpoint
@@ -82,15 +82,15 @@ validation_generator = test_datagen.flow_from_directory(
     class_mode='categorical')
 
 # Load pre-trained DenseNet model without the top layer
-base_model = DenseNet121(weights='imagenet', include_top=False, input_shape=(img_width, img_height, 3))
-
+base_2_model = DenseNet121(weights='imagenet', include_top=False, input_shape=(img_width, img_height, 3))
+base_6_model = DenseNet169(weights='imagenet', include_top=False, input_shape=(img_width, img_height, 3))
 # Freeze the layers in the base model
-for layer in base_model.layers:
+for layer in base_6_model.layers:
     layer.trainable = False
 
 # Create a new model
 model = Sequential()
-model.add(base_model)
+model.add(base_6_model)
 # model.add(Flatten())
 # model.add(Dense(512, activation='relu'))
 # model.add(Dense(n_classes, activation='softmax'))
